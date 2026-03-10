@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { TimeTracker } from './components/TimeTracker';
-import { WeeklySummary } from './components/WeeklySummary';
-import { Timer } from 'lucide-react';
+import ReactDOM from 'react-dom/client';
+import TimeTracker from './TimeTracker';
+import WeeklySummary from './WeeklySummary';
+// import { Timer } from 'lucide-react'; // Install dulu: npm install lucide-react
 
 interface TimeEntry {
   id: string;
@@ -10,10 +11,11 @@ interface TimeEntry {
   duration: number;
 }
 
-export default function App() {
+function App() {
   const [entries, setEntries] = useState<TimeEntry[]>([]);
 
   useEffect(() => {
+    console.log('App mounted');
     const storedEntries = localStorage.getItem('timeEntries');
     if (storedEntries) {
       setEntries(JSON.parse(storedEntries));
@@ -21,25 +23,48 @@ export default function App() {
   }, []);
 
   const handleEntriesChange = (newEntries: TimeEntry[]) => {
+    console.log('Entries updated:', newEntries);
     setEntries(newEntries);
+    localStorage.setItem('timeEntries', JSON.stringify(newEntries));
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <Timer className="w-8 h-8 text-blue-600" />
-            <h1 className="text-3xl">Time Tracker</h1>
+    <div style={{ 
+      minHeight: '100vh', 
+      backgroundColor: '#f3f4f6', 
+      padding: '2rem 1rem',
+      fontFamily: 'Arial, sans-serif'
+    }}>
+      <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            gap: '0.75rem',
+            marginBottom: '0.5rem'
+          }}>
+            {/* Timer icon */}
+            <span style={{ fontSize: '2rem', color: '#2563eb' }}>⏱️</span>
+            <h1 style={{ fontSize: '2rem', fontWeight: 'bold', margin: 0 }}>
+              Time Tracker
+            </h1>
           </div>
-          <p className="text-gray-600">
+          <p style={{ color: '#4b5563' }}>
             Track your studying, breaks, and procrastination time
           </p>
         </div>
 
-        <div className="space-y-8">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl mb-4">Log Your Time</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <div style={{ 
+            backgroundColor: 'white', 
+            borderRadius: '0.5rem', 
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)', 
+            padding: '1.5rem'
+          }}>
+            <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>
+              Log Your Time
+            </h2>
             <TimeTracker onEntriesChange={handleEntriesChange} />
           </div>
 
@@ -52,3 +77,13 @@ export default function App() {
   );
 }
 
+// ⚠️ INI YANG PENTING: RENDER APLIKASI
+const rootElement = document.getElementById('root');
+if (rootElement) {
+  ReactDOM.createRoot(rootElement).render(<App />);
+  console.log('✅ App rendered successfully!');
+} else {
+  console.error('❌ Root element not found!');
+}
+
+export default App;
