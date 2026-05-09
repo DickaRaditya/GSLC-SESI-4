@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import TimeTracker from './TimeTracker';
-import WeeklySummary from './WeeklySummary';
+import { TimeTracker } from './TimeTracker';
+import { WeeklySummary } from './WeeklySummary';
 // import { Timer } from 'lucide-react'; // Install dulu: npm install lucide-react
 
 interface TimeEntry {
